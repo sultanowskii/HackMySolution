@@ -39,7 +39,7 @@
      </rect>
     </property>
     <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
+     <cursorShape>ArrowCursor</cursorShape>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
@@ -58,7 +58,7 @@
      </rect>
     </property>
     <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
+     <cursorShape>ArrowCursor</cursorShape>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
@@ -125,6 +125,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="text">
      <string>Доска почёта</string>
     </property>
@@ -157,6 +160,9 @@
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="text">
      <string>Проверить тест!</string>
@@ -193,7 +199,7 @@
      </rect>
     </property>
     <property name="cursor">
-     <cursorShape>CrossCursor</cursorShape>
+     <cursorShape>WhatsThisCursor</cursorShape>
     </property>
     <property name="text">
      <string>made by @a7ult and @rivaldovsky</string>
