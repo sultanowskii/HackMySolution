@@ -1,7 +1,8 @@
 {
-	"players": {
-		"Arthur": 300,
-		"Michael": 432,
-		"Ramil": 501
-	}
+    "players": {
+        "Arthur": 300,
+        "Michael": 432,
+        "Ramil": 501,
+        "Dmitriy": 0
+    }
 }

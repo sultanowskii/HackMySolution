@@ -64,12 +64,22 @@ dima_answer = {self.solution_dima}.solve(int({input_num}))""") # выполня�
         if name == "":
             return
         self.leaderboard.append(Player(name))
+
+        with open('data/json/players.json') as f:
+            data = json.load(f)
+        data["players"][name] = 0
+        with open('data/json/players.json', 'w') as f:
+            f.write(json.dumps(data, ensure_ascii=False, indent=4))
+
         for widget in self.INTRO_WIDGETS:
             widget.setDisabled(True)    # выключаем главного экрана
             widget.hide()   # скрываем виджеты главного экрана
         for widget in self.LEVEL_WIDGETS:
             widget.setDisabled(False)   # включаем виджеты
             widget.show()   # показываем виджеты
+
+        # ENTER HERE TURNING OFF END_WIDGETS
+
         self.next_level()
 
     def end_game(self):
