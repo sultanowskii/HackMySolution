@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from main_ui import Ui_MainWindow
 from player import Player
 import json
+import subprocess
+from LeaderBoard import LeaderBoard
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -12,13 +14,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.curr_level = 0
         self.setupUi(self)
         self.INTRO_WIDGETS = [self.input_name, self.label_intro, self.btn_start, self.label_text4]
-        self.LEVEL_WIDGETS = [self.input_answer, self.btn_leaderboard, self.btn_solve, self.label_conditions,
+        self.LEVEL_WIDGETS = [self.input_answer, self.btn_solve, self.label_conditions,
                          self.label_solution, self.label_text1, self.label_text1, self.label_text2, self.label_text3]
         self.attempts = 0
         self.solution = ""  # название файла авторского решения конкретной задачи
         self.solution_dima = ""  # название файла решения Димы
-        self.leaderboard = []
+        self.players = self.get_players() # при запуске программы она считывает из .json список игроков, создает
+        #   для каждого отдельный экземпляр класса Player, и позже сортируется (в методе вызова списка для показа юзеру)
 
+        self.btn_leaderboard.move(30, 530) # пока так, потом 3 столбиком приклею к меню открытую доску почета
         for widget in self.LEVEL_WIDGETS:
             widget.setDisabled(True)    # выключаем виджеты уровней
             widget.hide()   # скрываем виджеты уровней
@@ -26,8 +30,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.btn_start.clicked.connect(self.start_game)
         self.btn_solve.clicked.connect(self.solve)
         self.btn_leaderboard.clicked.connect(self.open_leaderboard)
-        self.player_list = self.get_players()  # при запуске программы она считывает из .json список игроков, создает
-        #   для каждого отдельный экземпляр класса Player, и позже сортируется (в методе вызова списка для показа юзеру)
 
     def solve(self):
         try:
@@ -35,18 +37,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except:
             #   вывод сообщения об ошибке - введеный тест не является числом.
             return
-
-        right_answer = 0
-        dima_answer = 0
-        print(self.solution)
-        print(self.solution_dima)
-        exec(f"""
-import {self.solution}
-import {self.solution_dima}
-        
-right_answer = {self.solution}.solve(int({input_num}))
-dima_answer = {self.solution_dima}.solve(int({input_num}))""") # выполняем код из строки
-        if right_answer == dima_answer:
+        ca = subprocess.run(["python", f"data/levels/{str(self.curr_level)}/{self.solution}"], input=str(input_num), encoding="utf-8", stdout=subprocess.PIPE)
+        da = subprocess.run(["python", f"data/levels/{str(self.curr_level)}/{self.solution_dima}"], input=str(input_num), encoding="utf-8", stdout=subprocess.PIPE)
+        if ca.stdout == da.stdout:
             self.attempts += 1
             if self.attempts == 3:
                 self.end_game()
@@ -56,14 +49,18 @@ dima_answer = {self.solution_dima}.solve(int({input_num}))""") # выполня�
 
     def open_leaderboard(self):
         self.sort_players()
-        pass
+        top10 = []
+        for i in range(min(len(self.players), 10)):
+            top10.append(self.players[i])
+        self.Leaderboard = LeaderBoard(top10)
+        self.Leaderboard.show()
         # открываем доску лидеров
 
     def start_game(self):
         name = self.input_name.text()
         if name == "":
             return
-        self.leaderboard.append(Player(name))
+        self.players.append(Player(name))
 
         with open('data/json/players.json') as f:
             data = json.load(f)
@@ -71,6 +68,7 @@ dima_answer = {self.solution_dima}.solve(int({input_num}))""") # выполня�
         with open('data/json/players.json', 'w') as f:
             f.write(json.dumps(data, ensure_ascii=False, indent=4))
 
+        self.btn_leaderboard.move(1000, 10) # уберу
         for widget in self.INTRO_WIDGETS:
             widget.setDisabled(True)    # выключаем главного экрана
             widget.hide()   # скрываем виджеты главного экрана
@@ -88,13 +86,13 @@ dima_answer = {self.solution_dima}.solve(int({input_num}))""") # выполня�
     def next_level(self):
         self.curr_level += 1
         self.attempts = 0
-        self.load_level(self.curr_level)
+        self.load_level()
 
     def player_comparator(self, player):
         return int(player.score)
 
     def sort_players(self):
-        self.player_list.sort(key=self.player_comparator)
+        self.players.sort(key=self.player_comparator, reverse=True)
 
     def get_players(self):
         with open("data/json/players.json", "r") as data:
@@ -104,11 +102,11 @@ dima_answer = {self.solution_dima}.solve(int({input_num}))""") # выполня�
                 curr_player_list.append(Player(player, json_data["players"][player]))
         return curr_player_list
 
-    def load_level(self, level_num):
+    def load_level(self):
         with open("data/json/levels.json", "r") as data:
-            json_data = json.loads(data.read())["levels"][str(level_num)]
-            conditions_text = "data/levels/txt/" + json_data["conditions_text"]
-            solution_dima_text = "data/levels/txt/" + json_data["solution_dima_text"]
+            json_data = json.loads(data.read())["levels"][str(self.curr_level)]
+            conditions_text = f"data/levels/{str(self.curr_level)}/" + json_data["conditions_text"]
+            solution_dima_text = f"data/levels/{str(self.curr_level)}/" + json_data["solution_dima"]
             with open(conditions_text, 'r', encoding='utf-8') as f:
                 self.label_conditions.setText(f.read())
             with open(solution_dima_text, 'r', encoding='utf-8') as f:

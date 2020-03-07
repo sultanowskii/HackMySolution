@@ -1,22 +1,19 @@
 {
   "levels": {
     "1": {
-      "solution_dima_text": "solution_dima_text1.txt",
       "conditions_text": "conditions1.txt",
-      "solution": "solution1",
-      "solution_dima": "solution_dima1"
+      "solution": "solution1.py",
+      "solution_dima": "solution_dima1.py"
     },
     "2": {
-      "solution_dima_text": "solution_dima_text2.txt",
       "conditions_text": "conditions2.txt",
-      "solution": "solution2",
-      "solution_dima": "solution_dima2"
+      "solution": "solution2.py",
+      "solution_dima": "solution_dima2.py"
     },
     "3": {
-      "solution_dima_text": "solution_dima_text3.txt",
       "conditions_text": "conditions3.txt",
-      "solution": "solution3",
-      "solution_dima": "solution_dima3"
+      "solution": "solution3.py",
+      "solution_dima": "solution_dima3.py"
     }
   }
 }

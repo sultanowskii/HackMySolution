@@ -52,7 +52,6 @@ class Ui_MainWindow(object):
         self.label_text2.setFont(font)
         self.label_text2.setObjectName("label_text2")
         self.btn_leaderboard = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_leaderboard.setEnabled(False)
         self.btn_leaderboard.setGeometry(QtCore.QRect(1000, 10, 180, 50))
         font = QtGui.QFont()
         font.setFamily("MS Sans Serif")

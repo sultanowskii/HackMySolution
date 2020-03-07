@@ -123,12 +123,12 @@
    </widget>
    <widget class="QPushButton" name="btn_leaderboard">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>1000</x>
-      <y>10</y>
+      <x>30</x>
+      <y>530</y>
       <width>180</width>
       <height>50</height>
      </rect>
