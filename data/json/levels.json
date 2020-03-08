@@ -3,17 +3,20 @@
     "1": {
       "conditions_text": "conditions1.txt",
       "solution": "solution1.py",
-      "solution_dima": "solution_dima1.py"
+      "solution_dima": "solution_dima1.py",
+      "difficulty": "1"
     },
     "2": {
       "conditions_text": "conditions2.txt",
       "solution": "solution2.py",
-      "solution_dima": "solution_dima2.py"
+      "solution_dima": "solution_dima2.py",
+      "difficulty": "2"
     },
     "3": {
       "conditions_text": "conditions3.txt",
       "solution": "solution3.py",
-      "solution_dima": "solution_dima3.py"
+      "solution_dima": "solution_dima3.py",
+      "difficulty": "2"
     }
   }
 }

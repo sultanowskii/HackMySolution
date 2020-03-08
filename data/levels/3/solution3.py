@@ -1,3 +1,14 @@
-def solve(n):
-    pass
-    #   WRITE HERE AUTHOR'S SOLUTIONS CODE FOR 3 TASK
+a = int(input())
+b = int(input())
+c = int(input())
+
+if a > b:
+    if a > c:
+        print(a)
+    else:
+        print(c)
+else:
+    if b > c:
+        print(b)
+    else:
+        print(c)
