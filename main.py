@@ -54,14 +54,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         da = subprocess.run(["python", f"data/levels/{str(self.curr_level)}/{self.solution_dima}"], input=str('\n'.join(input_n)), encoding="utf-8", stdout=subprocess.PIPE)
         self.attempts += 1
         if ca.stdout == da.stdout:
-            self.m = Message(f"Ответы совпали! Ответ \nавторского решения:\n{str(ca.stdout)}")
+            self.m = Message(f"Ответы совпали!\nОтвет авторского решения:\n{str(ca.stdout)}Ответ Владика: {str(da.stdout)}")
             self.m.show()
             self.input_answer.setText("")
             if self.attempts == 3:
                 self.curr_level -= 1
                 self.end_game()
         else:
-            self.m = Message(f"Уровень пройден! Ответ \nавторского решения:\n{str(ca.stdout)}")
+            self.m = Message(f"Уровень пройден!\nОтвет авторского решения:\n{str(ca.stdout)}Ответ Владика: {str(da.stdout)}")
             self.m.show()
             if self.curr_level != 0:
                 self.curr_score += self.getValueFromLevel() * self.getValueFromTime(self.start_level_time, datetime.datetime.now()) * (4 - self.attempts) * 10
@@ -77,6 +77,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             top10.append(self.players[i])
         for i in range(len(top10)):
             self.player_labels[i].setText(f'{i + 1}. {self.getColorOfPlayer(top10[i])} - {top10[i].score}')
+            self.player_labels[i].resize(self.player_labels[i].sizeHint())
             self.player_labels[i].show()
 
     def start_game(self):
