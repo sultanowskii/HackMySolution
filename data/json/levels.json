@@ -4,19 +4,22 @@
       "conditions_text": "conditions1.txt",
       "solution": "solution1.py",
       "solution_dima": "solution_dima1.py",
-      "difficulty": "1"
+      "difficulty": "1",
+      "input_nums": 1
     },
     "2": {
       "conditions_text": "conditions2.txt",
       "solution": "solution2.py",
       "solution_dima": "solution_dima2.py",
-      "difficulty": "2"
+      "difficulty": "2",
+      "input_nums": 1
     },
     "3": {
       "conditions_text": "conditions3.txt",
       "solution": "solution3.py",
       "solution_dima": "solution_dima3.py",
-      "difficulty": "2"
+      "difficulty": "2",
+      "input_nums": 3
     }
   }
 }

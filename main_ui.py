@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
         self.label_conditions.setGeometry(QtCore.QRect(20, 40, 430, 520))
         font = QtGui.QFont()
         font.setFamily("Consolas")
-        font.setPointSize(9)
+        font.setPointSize(11)
         self.label_conditions.setFont(font)
         self.label_conditions.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.label_conditions.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -34,7 +34,7 @@ class Ui_MainWindow(object):
         self.label_solution.setGeometry(QtCore.QRect(470, 40, 430, 520))
         font = QtGui.QFont()
         font.setFamily("Consolas")
-        font.setPointSize(9)
+        font.setPointSize(11)
         self.label_solution.setFont(font)
         self.label_solution.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.label_solution.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -260,8 +260,11 @@ class Ui_MainWindow(object):
 "прочитать код Владика, найти в нём некоторые недоработки,\n"
 "и понять, какое число нужно подать в программу, чтобы\n"
 "ответ программы Владика и реальный (правильный) ответ\n"
-"не совпали."))
+"не совпали.\nВажно: в случае, если необходимо ввести несколько\n"
+"чисел, вводите их через пробел. Удачи!"))
         self.label_text4.setText(_translate("MainWindow", "Введите свой никнейм"))
         self.label.setText(_translate("MainWindow", "Доска почёта"))
         self.label_end.setText(_translate("MainWindow", "Игра окончена. Ваш результат: 0. Вы прошли 0 уровней"))
         self.btn_newgame.setText(_translate("MainWindow", "Новая игра"))
+        self.label_end.setWordWrap(True)
+        self.label_conditions.setWordWrap(True)

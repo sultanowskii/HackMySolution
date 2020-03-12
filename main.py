@@ -7,6 +7,7 @@ import json
 import subprocess
 from Message import Message
 import datetime
+from random import randint
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -169,12 +170,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             json_data = json.loads(data.read())["levels"][str(self.curr_level)]
             conditions_text = f"data/levels/{str(self.curr_level)}/" + json_data["conditions_text"]
             solution_dima_text = f"data/levels/{str(self.curr_level)}/" + json_data["solution_dima"]
-            with open(conditions_text, 'r', encoding='utf-8') as f:
-                self.label_conditions.setText(f.read())
             with open(solution_dima_text, 'r', encoding='utf-8') as f:
                 self.label_solution.setText(f.read())
             self.solution = json_data["solution"]
             self.solution_dima = json_data["solution_dima"]
+            self.input_nums = json_data["input_nums"]
+            input_n = []
+            verdict = 1
+            while verdict != 0:
+                for _ in range(self.input_nums):
+                    input_n.append(str(randint(-20, 21)))
+                ca = subprocess.run(["python", f"data/levels/{str(self.curr_level)}/{self.solution}"],
+                                    input=str('\n'.join(input_n)), encoding="utf-8", stdout=subprocess.PIPE)
+                verdict = ca.returncode
+            with open(conditions_text, 'r', encoding='utf-8') as f:
+                self.label_conditions.setText(f.read() + f"""\n\nПример:\nВходные данные: {' '.join(input_n)}\nВыходные данные: {ca.stdout}""")
+
 
     def getColorOfPlayer(self, player): #   делает ник цветным в зависимости от рейтинга игрока (как на CF)
         if player.score >= int(self.max_score_in30s / 10 * 8):
