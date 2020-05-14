@@ -17,7 +17,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.INTRO_WIDGETS = [self.input_name, self.label_intro, self.btn_start, self.label_text4]
         self.LEVEL_WIDGETS = [self.input_answer, self.btn_solve, self.label_conditions,
-                         self.label_solution, self.label_text1, self.label_text1, self.label_text2, self.label_text3]
+                              self.label_solution, self.label_text1, self.label_text1, self.label_text2, self.label_text3]
         self.END_WIDGETS = [self.label_end, self.btn_newgame]
         self.player_labels = [self.lbl1, self.lbl2, self.lbl3, self.lbl4, self.lbl5, self.lbl6, self.lbl7, self.lbl8,
                               self.lbl9, self.lbl10]
@@ -27,7 +27,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.start_level_time = None
         self.solution = ""  # название файла авторского решения конкретной задачи
         self.solution_dima = ""  # название файла решения Димы
-        self.players = self.get_players() # при запуске программы она считывает из .json список игроков, создает
+        self.players = self.get_players()  # при запуске программы она считывает из .json список игроков, создает
         #   для каждого отдельный экземпляр класса Player, и позже сортируется (в методе вызова списка для показа юзеру)
         self.level_count = 0
         self.max_score_in30s = self.getMaxScore()
@@ -51,21 +51,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.m = Message("Введите число/числа")
             self.m.show()
             return
-        ca = subprocess.run(["python", f"data/levels/{str(self.curr_level)}/{self.solution}"], input=str('\n'.join(input_n)), encoding="utf-8", stdout=subprocess.PIPE)
-        da = subprocess.run(["python", f"data/levels/{str(self.curr_level)}/{self.solution_dima}"], input=str('\n'.join(input_n)), encoding="utf-8", stdout=subprocess.PIPE)
+        ca = subprocess.run(["python", f"data/levels/{str(self.curr_level)}/{self.solution}"],
+                            input=str('\n'.join(input_n)), encoding="utf-8", stdout=subprocess.PIPE)
+        da = subprocess.run(["python", f"data/levels/{str(self.curr_level)}/{self.solution_dima}"],
+                            input=str('\n'.join(input_n)), encoding="utf-8", stdout=subprocess.PIPE)
         self.attempts += 1
         if ca.stdout == da.stdout:
-            self.m = Message(f"Ответы совпали!\nОтвет авторского решения:\n{str(ca.stdout)}Ответ Владика: {str(da.stdout)}")
+            self.m = Message(
+                f"Ответы совпали!\nОтвет авторского решения:\n{str(ca.stdout)}Ответ Владика: {str(da.stdout)}")
             self.m.show()
             self.input_answer.setText("")
             if self.attempts == 3:
                 self.curr_level -= 1
                 self.end_game()
         else:
-            self.m = Message(f"Уровень пройден!\nОтвет авторского решения:\n{str(ca.stdout)}Ответ Владика: {str(da.stdout)}")
+            self.m = Message(f"Уровень пройден!\nОтвет авторского решения:\n{str(ca.stdout)}Ответ "
+                             f"Владика: {str(da.stdout)}")
             self.m.show()
             if self.curr_level != 0:
-                self.curr_score += self.getValueFromLevel() * self.getValueFromTime(self.start_level_time, datetime.datetime.now()) * (4 - self.attempts) * 10
+                self.curr_score += self.getValueFromLevel() * self.getValueFromTime(self.start_level_time,
+                                                                                    datetime.datetime.now()) * \
+                                                                                    (4 - self.attempts) * 10
             if self.curr_level == self.level_count:
                 self.end_game()
             else:
@@ -82,9 +88,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.player_labels[i].show()
 
     def start_game(self):
-        self.curr_name = self.input_name.text()
+        self.curr_name = self.input_name.text().strip()
         if self.curr_name == "":
             self.m = Message("Введите никнейм")
+            self.m.show()
+            self.input_name.setText('')
+            return
+        elif len(self.curr_name) < 3:
+            self.m = Message("Никнейм слишком короткий! (минимум 3\nсимвола)")
+            self.m.show()
+            self.input_name.setText('')
+            return
+        elif len(self.curr_name) > 15:
+            self.m = Message("Никнейм слишком длинный! (максимум 14\nсимволов)")
+            self.input_name.setText('')
             self.m.show()
             return
         self.players.append(Player(self.curr_name))
@@ -97,11 +114,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.players[-1].score = self.curr_score
         self.update_leaderboard()
         for widget in self.INTRO_WIDGETS:
-            widget.setDisabled(True)    # выключаем главного экрана
-            widget.hide()   # скрываем виджеты главного экрана
+            widget.setDisabled(True)  # выключаем главного экрана
+            widget.hide()  # скрываем виджеты главного экрана
         for widget in self.LEVEL_WIDGETS:
-            widget.setDisabled(False)   # включаем виджеты
-            widget.show()   # показываем виджеты
+            widget.setDisabled(False)  # включаем виджеты
+            widget.show()  # показываем виджеты
         for widget in self.END_WIDGETS:
             widget.setDisabled(True)
             widget.hide()
@@ -184,10 +201,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                     input=str('\n'.join(input_n)), encoding="utf-8", stdout=subprocess.PIPE)
                 verdict = ca.returncode
             with open(conditions_text, 'r', encoding='utf-8') as f:
-                self.label_conditions.setText(f.read() + f"""\n\nПример:\nВходные данные: {' '.join(input_n)}\nВыходные данные: {ca.stdout}""")
+                self.label_conditions.setText(
+                    f.read() + f"""\n\nПример:\nВходные данные: {' '.join(input_n)}\nВыходные данные: {ca.stdout}""")
 
-
-    def getColorOfPlayer(self, player): #   делает ник цветным в зависимости от рейтинга игрока (как на CF)
+    def getColorOfPlayer(self, player):  # делает ник цветным в зависимости от рейтинга игрока (как на CF)
         if player.score >= int(self.max_score_in30s / 10 * 8):
             return f"""<font color="black">{player.name[0:1]}</font><font color="red">{player.name[1:]}</font>"""
         elif player.score >= int(self.max_score_in30s / 1000 * 625):
@@ -223,7 +240,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             return 1
 
-    def getValueFromLevel(self):     # значения сложности варьируются от 1 до 3
+    def getValueFromLevel(self):  # значения сложности варьируются от 1 до 3
         with open("data/json/levels.json", "r") as data:
             json_data = json.loads(data.read())["levels"][str(self.curr_level)]
             return int(json_data["difficulty"])
