@@ -30,7 +30,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.players = self.get_players()  # при запуске программы она считывает из .json список игроков, создает
         #   для каждого отдельный экземпляр класса Player, и позже сортируется (в методе вызова списка для показа юзеру)
         self.level_count = 0
-        self.max_score_in30s = self.getMaxScore()
+        self.max_score_in30s = self.get_max_score()
         for widget in self.LEVEL_WIDGETS:
             widget.setDisabled(True)
             widget.hide()
@@ -69,9 +69,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                              f"Владика: {str(da.stdout)}")
             self.m.show()
             if self.curr_level != 0:
-                self.curr_score += self.getValueFromLevel() * self.getValueFromTime(self.start_level_time,
-                                                                                    datetime.datetime.now()) * \
-                                                                                    (4 - self.attempts) * 10
+                self.curr_score += self.get_value_value() * self.get_value_time(self.start_level_time,
+                                                                                datetime.datetime.now()) * \
+                                   (4 - self.attempts) * 10
             if self.curr_level == self.level_count:
                 self.end_game()
             else:
@@ -83,7 +83,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(min(len(self.players), 10)):
             top10.append(self.players[i])
         for i in range(len(top10)):
-            self.player_labels[i].setText(f'{i + 1}. {self.getColorOfPlayer(top10[i])} - {top10[i].score}')
+            self.player_labels[i].setText(f'{i + 1}. {self.get_score_color(top10[i])} - {top10[i].score}')
             self.player_labels[i].resize(self.player_labels[i].sizeHint())
             self.player_labels[i].show()
 
@@ -204,7 +204,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.label_conditions.setText(
                     f.read() + f"""\n\nПример:\nВходные данные: {' '.join(input_n)}\nВыходные данные: {ca.stdout}""")
 
-    def getColorOfPlayer(self, player):  # делает ник цветным в зависимости от рейтинга игрока (как на CF)
+    def get_score_color(self, player):  # делает ник цветным в зависимости от рейтинга игрока (как на CF)
         if player.score >= int(self.max_score_in30s / 10 * 8):
             return f"""<font color="black">{player.name[0:1]}</font><font color="red">{player.name[1:]}</font>"""
         elif player.score >= int(self.max_score_in30s / 1000 * 625):
@@ -222,7 +222,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             return f"""<font color="gray">{player.name}</font>"""
 
-    def getValueFromTime(self, start, end):
+    def get_value_time(self, start, end):
         if end - start <= datetime.timedelta(seconds=5):
             return 8
         if end - start <= datetime.timedelta(seconds=15):
@@ -240,12 +240,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             return 1
 
-    def getValueFromLevel(self):  # значения сложности варьируются от 1 до 3
+    def get_value_value(self):  # значения сложности варьируются от 1 до 3
         with open("data/json/levels.json", "r") as data:
             json_data = json.loads(data.read())["levels"][str(self.curr_level)]
             return int(json_data["difficulty"])
 
-    def getMaxScore(self):
+    def get_max_score(self):
         with open("data/json/levels.json", "r") as data:
             maxx = 0
             data = json.loads(data.read())["levels"]
